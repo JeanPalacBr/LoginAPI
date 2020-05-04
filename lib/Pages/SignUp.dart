@@ -35,6 +35,8 @@ class signupformState extends State {
     final AcState = Provider.of<AccountState>(context);
     final _email = new TextEditingController();
     final _password = new TextEditingController();
+    final _name = new TextEditingController();
+    final _username = new TextEditingController();
     var Value;
 
     return Form(
@@ -51,6 +53,26 @@ class signupformState extends State {
               controller: _email,
               decoration:
                   new InputDecoration(labelText: "Email", hintText: "a@a.com"),
+              validator: (Value) {
+                if (Value.isEmpty) {
+                  return 'Por favor ingrese algun texto';
+                }
+              },
+            ),TextFormField(
+              autofocus: true,
+              controller: _username,
+              decoration:
+                  new InputDecoration(labelText: "Username", hintText: "username"),
+              validator: (Value) {
+                if (Value.isEmpty) {
+                  return 'Por favor ingrese algun texto';
+                }
+              },
+            ),TextFormField(
+              autofocus: true,
+              controller: _name,
+              decoration:
+                  new InputDecoration(labelText: "Name", hintText: "Name"),
               validator: (Value) {
                 if (Value.isEmpty) {
                   return 'Por favor ingrese algun texto';
