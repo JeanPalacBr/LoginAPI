@@ -11,11 +11,12 @@ class AccountState with ChangeNotifier {
   String _EmailStored;
   String _PasswordStored;
   String _Username;
+  String _Token;
 
-  void setLogin(String email, String password) {
-    if (email == _Email && password == _Password) {
+  void setLoggedin(String usern, String token){
+      _Token = token;
+      _Username = usern;
       _IsLogged = true;
-    }
     notifyListeners();
   }
   
@@ -23,11 +24,6 @@ class AccountState with ChangeNotifier {
     _Email = email;
     notifyListeners();
   }
-    void setUsername(String Uname) {
-    _Username = Uname;
-    notifyListeners();
-  }
-
   void setLogout() {
     _IsLogged = false;
     notifyListeners();

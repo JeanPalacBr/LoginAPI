@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:login/Pages/SignUp.dart';
 import 'package:login/Provider/AccountState.dart';
+import 'package:login/UserHandler.dart';
 import 'package:provider/provider.dart';
 import 'Home.dart';
 
 class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
-    final AcState = Provider.of<AccountState>(context);     
-          AcState.getpreferences();
+    final AcState = Provider.of<AccountState>(context);
+    AcState.getpreferences();
     return MaterialApp(
-      
         title: "Login",
         home: Scaffold(
           //resizeToAvoidBottomPadding: false,
@@ -35,11 +34,25 @@ class loginform extends StatefulWidget {
   }
 }
 
+void _onpressedlogin(var context, String email, String _password){
+  
+  signIn(email: email, password: _password)
+.then((user) {
+Provider.of<AccountState>(context, listen: false)
+.setLoggedin(user.username, user.token);
+        //return _buildDialog(context, "Exito!", "Done");
+}).catchError((error) {
+        //return _buildDialog(context, "Error", error.toString());
+}).timeout(Duration(seconds: 10), onTimeout: () {
+        //return _buildDialog(context, "Error", "Timeout > 10secs");
+});
+}
+
 class loginformState extends State {
   @override
   Widget build(BuildContext context) {
-        final AcState = Provider.of<AccountState>(context);     
-   
+    final AcState = Provider.of<AccountState>(context);
+
 
     final _signUpfkey = GlobalKey<FormState>();
     var Value;
@@ -80,13 +93,14 @@ class loginformState extends State {
               RaisedButton(
                 child: Text("Log In!"),
                 onPressed: () {
-                  AcState.setLogin(_email.value.text, _password.value.text);
-                  if(AcState.getlogin==true){
-                  AcState.setpreferences();  
-                  }else{
+                  
+                  //AcState.setLoggedin();
+                  _onpressedlogin(context, _email.value.text, _password.value.text);
+                  if (AcState.getlogin == true) {
+                    AcState.setpreferences();
+                  } else {
                     return "usuario o contraseña invalidos";
                   }
-                  
                 },
               )
             ],

@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:login/Pages/Login.dart';
 import 'package:login/Provider/AccountState.dart';
 import 'package:provider/provider.dart';
+
 var globalContext;
+
 class SignUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -58,23 +59,25 @@ class signupformState extends State {
                   return 'Por favor ingrese algun texto';
                 }
               },
-            ),TextFormField(
+            ),
+            TextFormField(
               autofocus: true,
               controller: _username,
-              decoration:
-                  new InputDecoration(labelText: "Username", hintText: "username"),
-              validator: (Value) {
-                if (Value.isEmpty) {
+              decoration: new InputDecoration(
+                  labelText: "Username", hintText: "username"),
+              validator: (Value2) {
+                if (Value2.isEmpty) {
                   return 'Por favor ingrese algun texto';
                 }
               },
-            ),TextFormField(
+            ),
+            TextFormField(
               autofocus: true,
               controller: _name,
               decoration:
                   new InputDecoration(labelText: "Name", hintText: "Name"),
-              validator: (Value) {
-                if (Value.isEmpty) {
+              validator: (Value3) {
+                if (Value3.isEmpty) {
                   return 'Por favor ingrese algun texto';
                 }
               },
@@ -84,8 +87,8 @@ class signupformState extends State {
               controller: _password,
               decoration: new InputDecoration(labelText: "Password"),
               obscureText: true,
-              validator: (Value2) {
-                if (Value.isEmpty) {
+              validator: (Value4) {
+                if (Value4.isEmpty) {
                   return 'Por favor ingrese algun texto';
                 }
               },
