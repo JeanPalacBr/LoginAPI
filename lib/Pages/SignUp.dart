@@ -33,14 +33,16 @@ class signupform extends StatefulWidget {
 
 void _onpressedSignUp(
     var context, String email, String _password, String userna, String nam) {
-  final AcState = Provider.of<AccountState>(context);
   signUp(email: email, password: _password, username: userna, name: nam)
       .then((user) {
-    return Text("Exitoo!");
+    return Scaffold.of(context)
+        .showSnackBar(SnackBar(content: Text('Registered')));
   }).catchError((error) {
-    //return _buildDialog(context, "Error", error.toString());
+    return Scaffold.of(context)
+        .showSnackBar(SnackBar(content: Text("Error" + error.toString())));
   }).timeout(Duration(seconds: 10), onTimeout: () {
-    //return _buildDialog(context, "Error", "Timeout > 10secs");
+    return Scaffold.of(context)
+        .showSnackBar(SnackBar(content: Text("Timeout error")));
   });
 }
 
@@ -106,20 +108,18 @@ class signupformState extends State {
             RaisedButton(
               child: Text("Register!"),
               onPressed: () {
-                setState(() {
-                  if (isEmail(_email.value.text)) {
-                    _onpressedSignUp(
-                        context,
-                        _email.value.text,
-                        _password.value.text,
-                        _username.value.text,
-                        _name.value.text);
-                  } else {
-                    Scaffold.of(context)
-                        .showSnackBar(SnackBar(content: Text('Invalid Email')));
-                  }
-                  Navigator.pop(globalContext);
-                });
+                if (isEmail(_email.value.text)) {
+                  _onpressedSignUp(
+                      context,
+                      _email.value.text,
+                      _password.value.text,
+                      _username.value.text,
+                      _name.value.text);
+                } else {
+                  Scaffold.of(globalContext)
+                      .showSnackBar(SnackBar(content: Text('Invalid Email')));
+                }
+                Navigator.pop(globalContext);
               },
             )
           ],
