@@ -7,13 +7,15 @@ import 'Home.dart';
 import 'package:string_validator/string_validator.dart';
 
 var contextsc;
-
+bool islogd;
+String usrn;
+String tokn;
 class Login extends StatelessWidget {
   @override
+  
   Widget build(BuildContext context) {
     contextsc = context;
     final AcState = Provider.of<AccountState>(context);
-    AcState.getpreferences();
     return MaterialApp(
         title: "Login",
         home: Scaffold(
@@ -21,28 +23,24 @@ class Login extends StatelessWidget {
           appBar: AppBar(
             title: Text("Login"),
           ),
-          body: AcState.getlogin ? HomePage() : islogged(),
+          body:  AcState.getlogin? HomePage() : islogged(),
         ));
     //home: AcState.getlogin? Home():islogged());
   }
 }
 
 class islogged extends StatefulWidget {
+   
+
+  
   isloggedstate createState() => isloggedstate();
 }
 
-class loginform extends StatefulWidget {
-  @override
-  loginformState createState() {
-    return loginformState();
-  }
-}
 
 void _onpressedlogin(var context, String email, String _password) {
-  final AcState = Provider.of<AccountState>(context);
   signIn(email: email, password: _password).then((user) {
     Provider.of<AccountState>(context, listen: false)
-        .setLoggedin(user.username, user.token);
+        .setLoggedin(user.username, user.token,true);
     return Scaffold.of(context)
         .showSnackBar(SnackBar(content: Text('Logged In')));
   }).catchError((error) {
@@ -54,16 +52,29 @@ void _onpressedlogin(var context, String email, String _password) {
   });
 }
 
-class loginformState extends State {
-  @override
-  Widget build(BuildContext context) {
-    final AcState = Provider.of<AccountState>(context);
+class isloggedstate extends State {
+final AcState = Provider.of<AccountState>(contextsc);
+ @override
+  void initState() {
+    super.initState();
+  AcState.auth();
+  }
 
+  bool auxlog = true;
+  
     final _signUpfkey = GlobalKey<FormState>();
-    var Value;
     final _email = new TextEditingController();
     final _password = new TextEditingController();
-    return Form(
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            Icons.airline_seat_individual_suite,
+            size: 100,
+          ),
+         Form(
         key: _signUpfkey,
         child: SingleChildScrollView(
           child: Column(
@@ -92,12 +103,6 @@ class loginformState extends State {
                   if (isEmail(_email.value.text)) {
                     _onpressedlogin(
                         context, _email.value.text, _password.value.text);
-
-                    if (AcState.getlogin == true) {
-                      AcState.setpreferences();
-                    } else {
-                      return "Invalid Email or Password";
-                    }
                   } else {
                     Scaffold.of(context).showSnackBar(
                         SnackBar(content: Text('Invalid Email or password')));
@@ -106,24 +111,7 @@ class loginformState extends State {
               )
             ],
           ),
-        ));
-  }
-}
-
-class isloggedstate extends State {
-  @override
-  bool auxlog = true;
-  Widget build(BuildContext context) {
-    final AcState = Provider.of<AccountState>(context);
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(
-            Icons.airline_seat_individual_suite,
-            size: 100,
-          ),
-          loginform(),
+        )),
           Text("or"),
           RaisedButton(
             child: Text("Sign Up"),

@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:login/Provider/AccountState.dart';
-import 'package:provider/provider.dart';
 import 'package:login/UserHandler.dart';
 import 'package:string_validator/string_validator.dart';
 
@@ -50,12 +48,10 @@ class signupformState extends State {
   @override
   Widget build(BuildContext context) {
     final _signUpfkey = GlobalKey<FormState>();
-    final AcState = Provider.of<AccountState>(context);
     final _email = new TextEditingController();
     final _password = new TextEditingController();
     final _name = new TextEditingController();
     final _username = new TextEditingController();
-    var Value;
 
     return Form(
         key: _signUpfkey,
@@ -77,8 +73,8 @@ class signupformState extends State {
               controller: _username,
               decoration: new InputDecoration(
                   labelText: "Username", hintText: "username"),
-              validator: (Value2) {
-                if (Value2.isEmpty) {
+              validator: (value2) {
+                if (value2.isEmpty) {
                   return 'Por favor ingrese algun texto';
                 }
               },
@@ -88,8 +84,8 @@ class signupformState extends State {
               controller: _name,
               decoration:
                   new InputDecoration(labelText: "Name", hintText: "Name"),
-              validator: (Value3) {
-                if (Value3.isEmpty) {
+              validator: (value3) {
+                if (value3.isEmpty) {
                   return 'Por favor ingrese algun texto';
                 }
               },
@@ -99,8 +95,8 @@ class signupformState extends State {
               controller: _password,
               decoration: new InputDecoration(labelText: "Password"),
               obscureText: true,
-              validator: (Value4) {
-                if (Value4.isEmpty) {
+              validator: (value4) {
+                if (value4.isEmpty) {
                   return 'Por favor ingrese algun texto';
                 }
               },
