@@ -25,6 +25,7 @@ dependencies:
   provider: ^2.0.1
   shared_preferences: ^0.5.7
   http: ^0.12.1
+  string_validator: ^0.1.4
 dev_dependencies:
   flutter_test:
     sdk: flutter

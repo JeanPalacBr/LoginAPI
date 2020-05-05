@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:login/Provider/AccountState.dart';
 import 'package:provider/provider.dart';
+import 'package:login/UserHandler.dart';
+import 'package:string_validator/string_validator.dart';
 
 var globalContext;
 
@@ -29,6 +31,19 @@ class signupform extends StatefulWidget {
   }
 }
 
+void _onpressedSignUp(
+    var context, String email, String _password, String userna, String nam) {
+  final AcState = Provider.of<AccountState>(context);
+  signUp(email: email, password: _password, username: userna, name: nam)
+      .then((user) {
+    return Text("Exitoo!");
+  }).catchError((error) {
+    //return _buildDialog(context, "Error", error.toString());
+  }).timeout(Duration(seconds: 10), onTimeout: () {
+    //return _buildDialog(context, "Error", "Timeout > 10secs");
+  });
+}
+
 class signupformState extends State {
   @override
   Widget build(BuildContext context) {
@@ -54,11 +69,6 @@ class signupformState extends State {
               controller: _email,
               decoration:
                   new InputDecoration(labelText: "Email", hintText: "a@a.com"),
-              validator: (Value) {
-                if (Value.isEmpty) {
-                  return 'Por favor ingrese algun texto';
-                }
-              },
             ),
             TextFormField(
               autofocus: true,
@@ -97,8 +107,17 @@ class signupformState extends State {
               child: Text("Register!"),
               onPressed: () {
                 setState(() {
-                  AcState.setEmail(_email.value.text);
-                  AcState.setPassword(_password.value.text);
+                  if (isEmail(_email.value.text)) {
+                    _onpressedSignUp(
+                        context,
+                        _email.value.text,
+                        _password.value.text,
+                        _username.value.text,
+                        _name.value.text);
+                  } else {
+                    Scaffold.of(context)
+                        .showSnackBar(SnackBar(content: Text('Invalid Email')));
+                  }
                   Navigator.pop(globalContext);
                 });
               },

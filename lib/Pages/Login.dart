@@ -4,10 +4,14 @@ import 'package:login/Provider/AccountState.dart';
 import 'package:login/UserHandler.dart';
 import 'package:provider/provider.dart';
 import 'Home.dart';
+import 'package:string_validator/string_validator.dart';
+
+var contextsc;
 
 class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    contextsc = context;
     final AcState = Provider.of<AccountState>(context);
     AcState.getpreferences();
     return MaterialApp(
@@ -34,25 +38,26 @@ class loginform extends StatefulWidget {
   }
 }
 
-void _onpressedlogin(var context, String email, String _password){
-  
-  signIn(email: email, password: _password)
-.then((user) {
-Provider.of<AccountState>(context, listen: false)
-.setLoggedin(user.username, user.token);
-        //return _buildDialog(context, "Exito!", "Done");
-}).catchError((error) {
-        //return _buildDialog(context, "Error", error.toString());
-}).timeout(Duration(seconds: 10), onTimeout: () {
-        //return _buildDialog(context, "Error", "Timeout > 10secs");
-});
+void _onpressedlogin(var context, String email, String _password) {
+  final AcState = Provider.of<AccountState>(context);
+  signIn(email: email, password: _password).then((user) {
+    Provider.of<AccountState>(context, listen: false)
+        .setLoggedin(user.username, user.token);
+    return Scaffold.of(context)
+        .showSnackBar(SnackBar(content: Text('Logged In')));
+  }).catchError((error) {
+    return Scaffold.of(context)
+        .showSnackBar(SnackBar(content: Text("Error" + error.toString())));
+  }).timeout(Duration(seconds: 10), onTimeout: () {
+    return Scaffold.of(context)
+        .showSnackBar(SnackBar(content: Text("Timeout error")));
+  });
 }
 
 class loginformState extends State {
   @override
   Widget build(BuildContext context) {
     final AcState = Provider.of<AccountState>(context);
-
 
     final _signUpfkey = GlobalKey<FormState>();
     var Value;
@@ -71,35 +76,31 @@ class loginformState extends State {
               TextFormField(
                 autofocus: true,
                 controller: _email,
+                keyboardType: TextInputType.emailAddress,
                 decoration: new InputDecoration(
                     labelText: "Email", hintText: "a@a.com"),
-                validator: (Value) {
-                  if (Value.isEmpty) {
-                    return 'Por favor ingrese algun texto';
-                  }
-                },
               ),
               TextFormField(
                 autofocus: true,
                 decoration: new InputDecoration(labelText: "Password"),
                 obscureText: true,
                 controller: _password,
-                validator: (Value2) {
-                  if (Value.isEmpty) {
-                    return 'Por favor ingrese algun texto';
-                  }
-                },
               ),
               RaisedButton(
                 child: Text("Log In!"),
                 onPressed: () {
-                  
-                  //AcState.setLoggedin();
-                  _onpressedlogin(context, _email.value.text, _password.value.text);
-                  if (AcState.getlogin == true) {
-                    AcState.setpreferences();
+                  if (isEmail(_email.value.text)) {
+                    _onpressedlogin(
+                        context, _email.value.text, _password.value.text);
+
+                    if (AcState.getlogin == true) {
+                      AcState.setpreferences();
+                    } else {
+                      return "Invalid Email or Password";
+                    }
                   } else {
-                    return "usuario o contraseña invalidos";
+                    Scaffold.of(context).showSnackBar(
+                        SnackBar(content: Text('Invalid Email or password')));
                   }
                 },
               )
