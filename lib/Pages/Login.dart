@@ -29,10 +29,7 @@ class Login extends StatelessWidget {
   }
 }
 
-class islogged extends StatefulWidget {
-   
-
-  
+class islogged extends StatefulWidget {  
   isloggedstate createState() => isloggedstate();
 }
 
